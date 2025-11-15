@@ -405,13 +405,23 @@
         // ダウンロード機能
         function downloadCertificate() {
             const certificate = document.getElementById('certificate');
+            const preview = document.querySelector('.certificate-preview');
+            
+            // 一時的にプレビューエリアの背景を透明にする
+            const originalBg = preview.style.background;
+            preview.style.background = 'transparent';
             
             html2canvas(certificate, {
                 scale: 3,
                 backgroundColor: null,
                 logging: false,
-                useCORS: true
+                useCORS: true,
+                windowWidth: certificate.scrollWidth,
+                windowHeight: certificate.scrollHeight
             }).then(canvas => {
+                // 背景を元に戻す
+                preview.style.background = originalBg;
+                
                 const link = document.createElement('a');
                 link.download = '賞状_' + document.getElementById('nameInput').value + '.png';
                 link.href = canvas.toDataURL('image/png');
